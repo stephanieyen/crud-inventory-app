@@ -16,7 +16,7 @@ function App() {
 
   // Send info from front-end to back-end
   const addItem = () => {
-    Axios.post("http://localhost:3001/create", {
+    Axios.post("https://crud-express-mysql.herokuapp.com/create", {
       item: item,
       quantity: quantity, 
       category: category, 
@@ -36,14 +36,14 @@ function App() {
 
   // Get info from database (back-end)
   const getInventory = () => {
-    Axios.get("http://localhost:3001/inventory").then((response) => {
+    Axios.get("https://crud-express-mysql.herokuapp.com/inventory").then((response) => {
       setInventoryList(response.data)
     });
   }
 
   // Update info in database
   const updateItemQuantity = (id) => {
-    Axios.put("http://localhost:3001/update", { quantity: newQuantity, id: id }).then(
+    Axios.put("https://crud-express-mysql.herokuapp.com/update", { quantity: newQuantity, id: id }).then(
       (response) => {
         setInventoryList(
           inventoryList.map((val) => {
@@ -63,7 +63,7 @@ function App() {
 
   // Delete info from database
   const deleteItem = (id) => {
-    Axios.delete(`http://localhost:3001/delete/${id}`).then((response) => {
+    Axios.delete(`https://crud-express-mysql.herokuapp.com/delete/${id}`).then((response) => {
       setInventoryList(
         inventoryList.filter((val) => {
           return val.id !== id;

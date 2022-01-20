@@ -7,15 +7,32 @@ const cors = require("cors");
 app.use(cors());
 app.use(express.json());
 
+// Add headers
+app.use((req,res,next)=>{
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.setHeader('Access-Control-Allow-Methods','GET,POST,PUT,PATCH,DELETE');
+    res.setHeader('Access-Control-Allow-Methods','Content-Type','Authorization');
+    next(); 
+})
+
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 
+// CLEARDB_DATABASE_URL
+// mysql://b0bdc00de356d7:4a20a554@us-cdbr-east-05.cleardb.net/heroku_95231274ee4f8c7?reconnect=true
 const inventoryDb = mysql.createConnection({
-  user: "root",
-  host: "localhost",
-  password: "Password",
-  database: "itemSystem",
+    user: "b0bdc00de356d7",
+    password: "4a20a554",
+    host: "us-cdbr-east-05.cleardb.net",
+    database: "heroku_95231274ee4f8c7"
 });
+
+// const inventoryDb = mysql.createConnection({
+//   user: "root",
+//   host: "localhost",
+//   password: "Password",
+//   database: "itemSystem",
+// });
 
 app.post("/create", (req, res) => {
   const item = req.body.item;
@@ -74,9 +91,10 @@ app.put("/update", (req, res) => {
   });
 
 // Set up server
-app.listen(3001, () => {
-  console.log("Listening on port 3001...");
+// app.listen(3001, () => {
+//   console.log("Listening on port 3001...");
+// });
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Our app is running on port ${ PORT }`);
 });
-// const port = process.env.PORT || 5000;
-// app.listen(port);
-// console.log(`Listening on ${port}`);
