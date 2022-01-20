@@ -111,7 +111,7 @@ function App() {
               <div>
                 <input
                   type="text"
-                  placeholder="1..."
+                  placeholder="Update quantity"
                   onChange={(event) => {
                     setNewQuantity(event.target.value);
                   }}
