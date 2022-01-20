@@ -42,7 +42,34 @@ app.get("/inventory", (req, res) => {
   });
 });
 
+app.put("/update", (req, res) => {
+    const id = req.body.id;
+    const quantity = req.body.quantity;
+    inventoryDb.query(
+      "UPDATE items SET quantity = ? WHERE id = ?",
+      [quantity, id],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.send(result);
+        }
+      }
+    );
+  });
+  
+  app.delete("/delete/:id", (req, res) => {
+    const id = req.params.id;
+    inventoryDb.query("DELETE FROM items WHERE id = ?", id, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    });
+  });
+
 // Set up server
 app.listen(3001, () => {
-  console.log("Yey, your server is running on port 3001");
+  console.log("Listening on port 3001...");
 });
