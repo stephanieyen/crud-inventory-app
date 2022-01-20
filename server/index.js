@@ -1,10 +1,14 @@
 const express = require("express");
+const path = require("path");
 const app = express();
 const mysql = require("mysql");
 const cors = require("cors");
 
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 const inventoryDb = mysql.createConnection({
   user: "root",
@@ -73,3 +77,6 @@ app.put("/update", (req, res) => {
 app.listen(3001, () => {
   console.log("Listening on port 3001...");
 });
+// const port = process.env.PORT || 5000;
+// app.listen(port);
+// console.log(`Listening on ${port}`);

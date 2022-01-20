@@ -11,6 +11,8 @@ function App() {
   const [newQuantity, setNewQuantity] = useState(0);
 
   const [inventoryList, setInventoryList] = useState([]);
+  const [searchItem, setSearchItem] = useState('');
+  const [searchQuantity, setSearchQuantity] = useState(0);
 
   // Send info from front-end to back-end
   const addItem = () => {
@@ -45,7 +47,7 @@ function App() {
       (response) => {
         setInventoryList(
           inventoryList.map((val) => {
-            return val.id == id
+            return val.id === id
               ? {
                   item: val.item,
                   quantity: newQuantity, 
@@ -64,7 +66,7 @@ function App() {
     Axios.delete(`http://localhost:3001/delete/${id}`).then((response) => {
       setInventoryList(
         inventoryList.filter((val) => {
-          return val.id != id;
+          return val.id !== id;
         })
       );
     });
@@ -72,73 +74,102 @@ function App() {
 
   return (
     <div className="App">
-      <div className="inventory">
+
+      <div className="inventoryAdd">
+        <h1>Welcome to your inventory tracking app!</h1>
+        <h2>Add new items here. They will show up at the bottom of your screen.</h2>
+
         <label>Item: </label>
-        <input type="text" onChange={(event) => {
-          setItem(event.target.value);
+        <input type="text" placeholder="Pencil"
+               onChange={(event) => {
+                  setItem(event.target.value);
         }} />
 
         <label>Quantity: </label>
-        <input type="number" onChange={(event) => {
-          setQuantity(event.target.value);
+        <input type="number" placeholder="5"
+               onChange={(event) => {
+                  setQuantity(event.target.value);
         }} />
 
         <label>Category: </label>
-        <input type="text" onChange={(event) => {
-          setCategory(event.target.value);
+        <input type="text" placeholder="Supplies"
+               onChange={(event) => {
+                  setCategory(event.target.value);
         }} />
 
         <label>Unit price: </label>
-        <input type="number" onChange={(event) => {
-          setPrice(event.target.value);
+        <input type="number" placeholder="0.50"
+               onChange={(event) => {
+                  setPrice(event.target.value);
         }} />
 
         <button onClick={addItem}>Add Item</button>
       </div>
-      <div className="inventory">
-        <button onClick={getInventory}>Show Inventory</button>
 
-        {inventoryList.map((val, key) => {
+
+
+      <div className="inventoryView">
+        <h2>View your inventory here. Update or delete items if necessary. You can filter by item and/or minimum quantity.</h2>
+
+        <button onClick={getInventory}>View Inventory</button>
+
+        <input type="text" placeholder="Filter by item"
+                onChange={event => {setSearchItem(event.target.value)}}/>
+        <input type="number" placeholder="Filter by minimum quantity"
+                onChange={event => {setSearchQuantity(event.target.value)}}/>
+        
+        {inventoryList.filter((val) => {
+          if (searchItem === "" && searchQuantity === "") {
+            return val;
+          } else if (val.item.toLowerCase().includes(searchItem.toLowerCase()) && searchQuantity === "") {
+            return val;
+          } else if (searchItem === "" && val.quantity >= searchQuantity) {
+            return val;
+          } else if (val.item.toLowerCase().includes(searchItem.toLowerCase()) && val.quantity >= searchQuantity) {
+            return val;
+          }
+        }).map((val, key) => {
           return (
-            <div className="item">
-              <div>
-                <h3>Item: {val.item}</h3>
-                <h3>Quantity: {val.quantity}</h3>
-                <h3>Category: {val.category}</h3>
-                <h3>Price: {val.price}</h3>
-              </div>
+            <div>
+              <div className="item" key={key}>
+                <div>
+                  <h3>Item: {val.item}</h3>
+                  <h3>Quantity: {val.quantity}</h3>
+                  <h3>Category: {val.category}</h3>
+                  <h3>Unit price: {val.price}</h3>
+                </div>
 
-              <div>
-                <input
-                  type="text"
-                  placeholder="Update quantity"
-                  onChange={(event) => {
-                    setNewQuantity(event.target.value);
-                  }}
-                />
-                <button
-                  onClick={() => {
-                    updateItemQuantity(val.id);
-                  }}
-                >
-                  {" "}
-                  Update
-                </button>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Update quantity"
+                    onChange={(event) => {
+                      setNewQuantity(event.target.value);
+                    }}
+                  />
+                  <button
+                    onClick={() => {
+                      updateItemQuantity(val.id);
+                    }}
+                  >
+                    {" "}
+                    Update
+                  </button>
 
-                <button
-                  onClick={() => {
-                    deleteItem(val.id);
-                  }}
-                >
-                  Delete
-                </button>
+                  <button
+                    onClick={() => {
+                      deleteItem(val.id);
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
-            
           );
         })}
-      </div>
 
+      </div>
     </div>
   );
 }
