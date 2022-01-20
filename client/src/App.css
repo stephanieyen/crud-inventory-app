@@ -1,0 +1,50 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.inventory {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.inventory input {
+  width: 300px;
+  height: 25px;
+  font-size: 16px;
+  padding-left: 10px;
+  margin: 5px;
+}
+
+button {
+  width: 300px;
+  height: 25px;
+  margin-top: 15px;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+.inventory {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.item {
+  width: 700px;
+  height: 180px;
+  border: 1px solid black;
+  margin: 10px;
+  display: flex;
+  padding: 10px;
+}
+
+.item h3 {
+  margin: 20px;
+}
